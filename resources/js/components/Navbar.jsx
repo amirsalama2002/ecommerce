@@ -1,10 +1,12 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, IconButton, Box, Badge } from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
-import "../../css/Navbar.css";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -12,19 +14,48 @@ export default function Navbar() {
   };
 
   return (
-    <Box className="navbar-container">
-      <Box className="navbar-left" onClick={() => navigate("/products")}>
-        <img src="/imgs/izam_logo_white.png" alt="Logo" className="navbar-logo" />
-        <Typography variant="h6" className="navbar-title">E-Shop</Typography>
-      </Box>
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* Left: Logo and title */}
+        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => navigate("/")}>
+          <img src="/imgs/izam_logo_white.png" alt="Logo" style={{ height: 40, marginRight: 8, }} />
+          {/* <Typography variant="h6" color="text.primary">
+            E-Shop
+          </Typography> */}
+        </Box>
 
-      <Box className="navbar-right">
-        <Button color="primary" onClick={() => navigate("/add-product")}>Add Product</Button>
-        <Button color="primary" onClick={() => navigate("/products")}>Products</Button>
-        <Button color="primary" onClick={() => navigate("/cart")}>Cart</Button>
-        <Button color="primary" onClick={handleLogout}>Logout</Button>
+        {/* Center: Search Icon */}
+        <IconButton color="inherit" onClick={() => navigate("/products")}>
+          <SearchIcon />
+        </IconButton>
 
-      </Box>
-    </Box>
+        {/* Right: Buttons */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton color="inherit" onClick={() => navigate("/cart")}>
+            <Badge badgeContent={0} color="primary">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+
+          {token ? (
+            <>
+              <Button color="primary" onClick={() => navigate("/add-product")}>
+                Add Product
+              </Button>
+              <Button color="primary" onClick={() => navigate("/products")}>
+                Products
+              </Button>
+              <Button color="primary" onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button color="primary" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

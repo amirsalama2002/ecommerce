@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, TextField, Button, Card, CardContent, CardMedia, Typography, Box, MenuItem, Alert } from "@mui/material";
+import {
+  Container,
+  Grid,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+  MenuItem,
+  Alert
+} from "@mui/material";
 
 export default function Products({ cart, setCart }) {
   const [products, setProducts] = useState([]);
@@ -20,7 +32,7 @@ export default function Products({ cart, setCart }) {
 
       const response = await fetch(url);
       const data = await response.json();
-      setProducts(data.data);
+      setProducts(Array.isArray(data) ? data : data.data);
     } catch (err) {
       console.error("Error fetching products", err);
     }
@@ -56,42 +68,54 @@ export default function Products({ cart, setCart }) {
   };
 
   return (
-    <Container>
-      <Box className="products-header">
-        <Typography variant="h4">Products</Typography>
-        <Box className="search-container" sx={{ mt: 2 }}>
-          <TextField label="Search" value={search} onChange={(e) => setSearch(e.target.value)} size="small" sx={{ mr: 1 }} />
-          <TextField label="Category" select value={category} onChange={(e) => setCategory(e.target.value)} size="small" sx={{ mr: 1 }}>
+    <Container sx={{ mt: 4 }}>
+      <Box className="products-header" sx={{ mb: 2 }}>
+        <Typography variant="h4" gutterBottom>Products</Typography>
+        <Box className="search-container" sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          <TextField label="Search" value={search} onChange={(e) => setSearch(e.target.value)} size="small" />
+          <TextField label="Category" select value={category} onChange={(e) => setCategory(e.target.value)} size="small" sx={{ minWidth: 120 }}>
             <MenuItem value="">All</MenuItem>
             <MenuItem value="Electronics">Electronics</MenuItem>
             <MenuItem value="Clothing">Clothing</MenuItem>
             <MenuItem value="Books">Books</MenuItem>
           </TextField>
-          <TextField label="Min Price" type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} size="small" sx={{ mr: 1 }} />
-          <TextField label="Max Price" type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} size="small" sx={{ mr: 1 }} />
+          <TextField label="Min Price" type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} size="small" />
+          <TextField label="Max Price" type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} size="small" />
           <Button variant="contained" onClick={fetchProducts}>Filter</Button>
         </Box>
       </Box>
 
-      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      <Grid container spacing={3} sx={{ mt: 2 }}>
+      <Grid container spacing={3}>
         {products.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Card className="product-card">
-              <CardMedia component="img" height="160" image={`http://127.0.0.1:8000/storage/${product.image}`} alt={product.name} className="product-image" />
-              <CardContent>
-                <Typography variant="h6">{product.name}</Typography>
-                <Typography color="text.secondary">Price: ${product.price}</Typography>
+            <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+              <CardMedia
+                component="img"
+                height="180"
+                image={`http://127.0.0.1:8000/storage/${product.image}`}
+                alt={product.name}
+                sx={{ objectFit: "cover" }}
+              />
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" gutterBottom noWrap>{product.name}</Typography>
+                <Typography color="text.secondary" gutterBottom>Price: ${product.price}</Typography>
                 <TextField
                   label="Quantity"
                   type="number"
                   size="small"
                   value={quantities[product.id] || 1}
                   onChange={(e) => handleQuantityChange(product.id, e.target.value)}
-                  sx={{ mt: 1 }}
+                  sx={{ mt: 1, width: "100px" }}
+                  inputProps={{ min: 1 }}
                 />
-                <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={() => addToCart(product)}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  onClick={() => addToCart(product)}
+                >
                   Add to Cart
                 </Button>
               </CardContent>
