@@ -1,0 +1,30 @@
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.navbar-logo {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+.navbar-title {
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.navbar-right button {
+    margin-left: 15px;
+    font-weight: bold;
+}

@@ -1,0 +1,26 @@
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.login-logo {
+    /* width: 150px; */
+    margin-bottom: 20px;
+}
+
+.login-card {
+    padding: 30px;
+    width: 100%;
+}
+
+.loo{
+    cursor: pointer;
+}
+
+.btn{
+    background-color: black !important;
+    color: white !important;
+}
